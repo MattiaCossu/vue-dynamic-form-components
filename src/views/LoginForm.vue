@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
+import { handleError } from 'vue';
 
 function onSubmit() {
     alert('Submitted')
 }
-
 
 const validation = {
     email: (value: string) => {
@@ -24,12 +24,12 @@ const validation = {
     }
 }
 
-useForm({
+const {errors} = useForm({
     validationSchema: validation
 })
 
-const { value: emailValue, errorMessage: emailError } = useField('email')
-const { value: passwordValue, errorMessage: passwordError } = useField('password')
+const { value: email, handleChange } = useField('email')
+const { value: password } = useField('password')
 </script>
 
 <template>
@@ -37,15 +37,16 @@ const { value: passwordValue, errorMessage: passwordError } = useField('password
         <BaseInput 
             label="Email" 
             type="email" 
-            v-model="emailValue"
-            :error="emailError"
+            :modelValue="email"
+            :error="errors.email"
+            @change="handleChange"
         />
 
         <BaseInput 
             label="Password" 
             type="password" 
-            v-model="passwordValue"
-            :error="passwordError"
+            v-model="password"
+            :error="errors.password"
         />
 
         <BaseButton 
